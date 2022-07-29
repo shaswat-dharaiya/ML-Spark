@@ -55,7 +55,7 @@ spark-submit target/Trainer-1.0-SNAPSHOT.jar
 
 ![performance](images/performance.png)
 
-This will create a `data/TrainingModel` folder and store trained model to it.
+This will create a `model/ModelTrained` folder and store trained model to it.
 Verify model is created by executing following :
 ```
 hdfs dfs -ls -t -R
@@ -64,7 +64,7 @@ hdfs dfs -ls -t -R
 
 Copy This folder back to our master node using following
 ```
-hdfs dfs -copyToLocal data/TrainingModel /home/hadoop/wine_quality
+hdfs dfs -copyToLocal model/ModelTrained /home/hadoop/wine_quality
 ```
 
 Zip it
