@@ -22,6 +22,8 @@ On creating the cluster, we will have access to the s3 bucket attached to the cl
 
 Upload the `target` containing the jar file `Trainer-1.0-SNAPSHOT.jar` & `dataset` to the bucket.
 
+`target` folder is generated when you type `mvn-compile-package`.
+
 ![Folders](images/folders.png)
 
 Login it to the `master` instance & pull the files from s3 bucket.
