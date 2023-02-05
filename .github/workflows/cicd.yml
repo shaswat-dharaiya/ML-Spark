@@ -1,0 +1,35 @@
+# Name of the action/job
+name: CICD
+
+# Trigger event
+on:
+# Conditions for an event to be triggered.
+  push:
+    branches:
+      - main
+    paths: 
+      - src/main/java/*
+      - model/ModelTrained/*
+
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: SyncS3
+        run: sh ./scripts/cicd.sh
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: './s3_script/s3_script.py'
+          DEST_DIR: 'scripts/'
+
+
+

@@ -26,7 +26,7 @@ Upload the `target` containing the jar file `Trainer-1.0-SNAPSHOT.jar` & `datase
 
 ![Folders](images/folders.png)
 
-Login it to the `master` instance & pull the files from s3 bucket.
+Login to the `master` instance & pull the files from s3 bucket.
 
 ```
 aws s3 cp s3://aws-logs-612956122687-us-east-1/elasticmapreduce/j-33M8LH0D9HLMD/dataset/ ./ --recursive
