@@ -1,10 +1,12 @@
 # Wine Quality Prediction
 
-## Links
-
-* [Github](https://github.com/shaswat-dharaiya/ML-Spark)
-
-* [Docker](https://hub.docker.com/repository/docker/srd22/wine_quality)
+- [Wine Quality Prediction](#wine-quality-prediction)
+  - [1. Parallel training implementation](#1-parallel-training-implementation)
+  - [2. Single machine prediction](#2-single-machine-prediction)
+  - [3. Docker container for prediction](#3-docker-container-for-prediction)
+      - [Link to Docker Container](#link-to-docker-container)
+  - [4. Terraform - Automation of the infrastructure](#4-terraform---automation-of-the-infrastructure)
+  - [5. CI/CD GitHub Action](#5-cicd-github-action)
 
 ## 1. Parallel training implementation
 * Create a cluster
@@ -102,6 +104,10 @@ spark-submit target/Trainer-1.0-SNAPSHOT.jar
 
 ## 3. Docker container for prediction
 
+#### Link to Docker Container
+
+* [Docker Container](https://hub.docker.com/repository/docker/srd22/wine_quality)
+
 Now we're going to build our docker image & create a container out of it.
 
 Make sure you are login to docker.io on your local machine
@@ -125,3 +131,57 @@ Then go to your ec2 and use following command to run the docker
 docker run --mount type=bind,source=/home/ec2-user/TestingDataset.csv,target=/TestingDataset.csv srd22/wine_quality
 ```
 ![docker_ec2](images/docker_ec2.png)
+
+## 4. Terraform - Automation of the infrastructure
+
+Set the following as Environment variables -`AWS_ACCESS_KEY_ID_ROOT`, `AWS_SECRET_ACCESS_KEY_ROOT`, `AWS_REGION`
+
+1. Run [scripts/root_setup.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/root_setup.sh) script to perform root level environment setup.
+   * Executes [infrastructure/user/create_user.tf](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/infrastructure/user/create_user.tf) that will create `IAM User`, `Role`, `Profile`, and `Security Group`
+
+2. Run [scripts/setup_train.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/setup_train.sh) script to create the EMR Cluster & Train the model.
+   * Executes [infrastructure/buckets/create_bucket.tf](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/infrastructure/buckets/create_bucket.tf) that creates an S3 bucket if not present. Populate it with a `tar` file that contains the dataset and application `jar` file.
+   * Executes [infrastructure/cluster/create_cluster.tf](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/infrastructure/cluster/create_cluster.tf) that creates an EMR Cluster to train the model.
+     1. Executes `Bootstrap Action` - [scripts/user_script_ec2.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/user_script_ec2.sh), that sets up file structure on emr cluster.
+     2. Executes `Spark Step` - [scripts/spark_steps.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/spark_steps.sh), that trains a model on emr and uploads the model to S3 bucket.
+
+3. Run [scripts/setup_test.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/setup_test.sh) script to test the model on an ec2.
+    * Executes [infrastructure/instance/create_instance.tf](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/infrastructure/instance/create_instance.tf) that creates an EC2 instance Populate it with a `tar` file that contains the dataset and application `jar` file.
+    * Executes [scripts/testing_script.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/testing_script.sh) script to setup a Spark + Hadoop Environment on ec2 and executes `spark-submit` to test the model.
+
+## 5. CI/CD GitHub Action
+
+Achieves CI/CD using Github Action that will retrain the model if there are some changes made to the source code:
+
+```yml
+on:
+# Conditions for an event to be triggered.
+  push:
+    branches:
+      - main
+    paths: 
+      - src/main/java/*
+```
+
+
+
+> [scripts/setup_train.sh](https://github.com/shaswat-dharaiya/ML-Spark/blob/main/scripts/setup_train.sh) will be executed to retrain the model.
+
+
+
+```yml
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Sync & Train
+        run: sh ./scripts/setup_train.sh
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION_USER }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_USER }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_USER }}
+```
