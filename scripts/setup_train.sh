@@ -1,6 +1,6 @@
 #!/bin/sh
 
-bucket_name=ml-train12
+bucket_name=ml-train1
 
 AWS_REGION="us-east-1"
 
