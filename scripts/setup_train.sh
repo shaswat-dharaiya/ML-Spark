@@ -1,6 +1,6 @@
 #!/bin/sh
 
-bucket_name=ml-train1
+bucket_name="ml-train1"
 
 
 aws configure --profile ml-spark-aws <<-EOF > /dev/null 2>&1
@@ -44,7 +44,7 @@ aws s3 cp ./scripts/spark_steps.sh s3://$bucket_name/scripts/spark_steps.sh --pr
 aws s3 cp ./scripts/user_script_ec2.sh s3://$bucket_name/scripts/user_script_ec2.sh --profile ml-spark-aws
 
 python ./scripts/change_mode.py Trainer
-mvn clean install
+mvn clean install > /dev/null
 tar --exclude='*.DS_Store' -zcvf training.tar ./dataset/TrainingDataset.csv ./dataset/ValidationDataset.csv ./target/MLTrain_Trainer-1.0-SNAPSHOT.jar
 
 aws s3 cp ./training.tar s3://$bucket_name/training.tar --profile ml-spark-aws
@@ -53,6 +53,7 @@ cd ./infrastructure/cluster/
 export TF_VAR_access_key=$AWS_ACCESS_KEY_ID
 export TF_VAR_secret_key=$AWS_SECRET_ACCESS_KEY
 export TF_VAR_region=$AWS_REGION
+export TF_VAR_bucket_name=$bucket_name
 terraform init > /dev/null
 terraform plan > /dev/null
 terraform apply --auto-approve
