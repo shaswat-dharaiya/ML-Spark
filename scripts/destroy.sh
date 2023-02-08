@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Exit immediately
 AWS_REGION="us-east-1"
 aws configure --profile rearc-quest-aws <<-EOF > /dev/null 2>&1
@@ -8,25 +10,32 @@ text
 EOF
 
 # Empty the buckets.
-aws s3 rm s3://s2quest/ \
-              --profile rearc-quest-aws \
-              --recursive
+# aws s3 rm s3://s2quest/ \
+#               --profile rearc-quest-aws \
+#               --recursive
 
-aws s3 rm s3://s1quest/ \
-              --profile rearc-quest-aws \
-              --recursive
+# aws s3 rm s3://s1quest/ \
+#               --profile rearc-quest-aws \
+#               --recursive
 
 
 # Unset the variables.
-aws configure --profile rearc-quest-aws <<-EOF > /dev/null 2>&1
-null
-null
-null
-text
-EOF
+# aws configure --profile rearc-quest-aws <<-EOF > /dev/null 2>&1
+# null
+# null
+# null
+# text
+# EOF
 
 # Delete the infrastructure.
-cd ./infrastructure/pipeline/
+cd ./infrastructure/cluster/
 terraform destroy --auto-approve
-cd  ../buckets
+
+cd ./../instance/
 terraform destroy --auto-approve
+
+
+# cd  ../buckets
+
+# bucket_name=ml-train1
+# terraform destroy -var="bucket_name=$bucket_name" --auto-approve

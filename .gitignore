@@ -10,7 +10,9 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
-*.csv
+*.tar
+private_key.csv
+srd22_accessKeys.csv
 *.DS_Store
 *.cer
 *.code-workspace

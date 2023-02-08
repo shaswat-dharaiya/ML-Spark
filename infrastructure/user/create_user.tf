@@ -38,7 +38,9 @@ resource "aws_iam_user_policy_attachment" "attach-user" {
     "arn:aws:iam::aws:policy/AmazonS3FullAccess", 
     "arn:aws:iam::aws:policy/AmazonSQSFullAccess",
     "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
-    "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+    "arn:aws:iam::aws:policy/CloudWatchFullAccess",
+    "arn:aws:iam::aws:policy/AmazonEMRFullAccessPolicy_v2",
+    "arn:aws:iam::aws:policy/AmazonElasticMapReduceFullAccess"
   ])
   policy_arn = each.value   
 }
@@ -52,7 +54,7 @@ data "aws_iam_policy_document" "AWSEC2TrustPolicy" {
     effect     = "Allow"
     principals {
       type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
+      identifiers = ["ec2.amazonaws.com","elasticmapreduce.amazonaws.com"]
     }
   }
 }
@@ -75,7 +77,9 @@ resource "aws_iam_role_policy_attachment" "srd_policy-attachment" {
     "arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess",
     "arn:aws:iam::aws:policy/AmazonEventBridgeSchemasFullAccess",
     "arn:aws:iam::aws:policy/AmazonEventBridgeSchedulerFullAccess",
-    "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+    "arn:aws:iam::aws:policy/CloudWatchFullAccess",
+    "arn:aws:iam::aws:policy/AmazonEMRFullAccessPolicy_v2",
+    "arn:aws:iam::aws:policy/AmazonElasticMapReduceFullAccess"
   ])
   role       = "${aws_iam_role.s3_quest_terraform.name}"
   policy_arn = each.value

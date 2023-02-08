@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>MLTrain</artifactId>
+    <artifactId>MLTrain_Testor</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <scala.version>2.11</scala.version>
-        <spark.version>2.4.5</spark.version>
+        <scala.version>2.12</scala.version>
+        <spark.version>3.3.1</spark.version>
         <hadoop.version>2.7.3</hadoop.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
