@@ -1,5 +1,11 @@
 # #!/bin/bash
 
+AWS_ACCESS_KEY_ID=$1
+AWS_SECRET_ACCESS_KEY=$2
+AWS_REGION=$3
+
+echo "key: $AWS_ACCESS_KEY_ID"
+
 sudo apt-get update -y > /dev/null
 echo "update complete"
 sudo apt install -y awscli > /dev/null
@@ -13,13 +19,13 @@ echo "py4j installed"
 
 AWS_ACCESS_KEY_ID=$1
 AWS_SECRET_ACCESS_KEY=$2
-$AWS_REGION=$3
+AWS_REGION=$3
 
 bucket_name=ml-train1 
 
 aws configure --profile ml-spark-aws <<-EOF > /dev/null 2>&1
-$AWS_ACCESS_KEY_ID_ROOT
-$AWS_SECRET_ACCESS_KEY_ROOT
+$AWS_ACCESS_KEY_ID
+$AWS_SECRET_ACCESS_KEY
 $AWS_REGION
 text
 EOF

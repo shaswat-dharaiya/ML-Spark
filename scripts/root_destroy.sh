@@ -1,4 +1,4 @@
-# This script destroy the IAM User.
+# This script destroys the IAM User.
 cd  ./infrastructure/user
 export TF_VAR_access_key=$AWS_ACCESS_KEY_ID_ROOT
 export TF_VAR_secret_key=$AWS_SECRET_ACCESS_KEY_ROOT
