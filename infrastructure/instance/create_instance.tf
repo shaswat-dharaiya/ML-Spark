@@ -1,11 +1,11 @@
-locals {
-  instances = csvdecode(file("../user/private_key.csv"))
-}
+variable "access_key" {}
+variable "region" {}
+variable "secret_key" {}
 
 provider "aws" {
-  access_key = tolist(local.instances)[0]["Access key ID"]
-  secret_key = tolist(local.instances)[0]["Secret access key"]
-  region = "us-east-1"
+  region = "${var.region}"
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
 }
 
 # Access the IAM Role created earlier
@@ -68,7 +68,7 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ubuntu/testing_script.sh",
-      "/home/ubuntu/testing_script.sh ${tolist(local.instances)[0]["Access key ID"]} ${tolist(local.instances)[0]["Secret access key"]}",
+      "/home/ubuntu/testing_script.sh ${var.access_key} ${var.secret_key} ${var.region}",
     ]
 
     connection {

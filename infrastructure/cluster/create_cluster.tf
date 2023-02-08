@@ -1,13 +1,14 @@
-# # Acccess the user's credentials
-locals {
-  instances = csvdecode(file("../user/private_key.csv"))
-}
+variable "access_key" {}
+variable "bucket_name"{}
+variable "secret_key" {}
+variable "region" {}
 
 provider "aws" {
-  access_key = tolist(local.instances)[0]["Access key ID"]
-  secret_key = tolist(local.instances)[0]["Secret access key"]
-  region = "us-east-1"
+  region = "${var.region}"
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
 }
+
 
 # Access the IAM Role created earlier
 data "aws_iam_role" "ml_user" {

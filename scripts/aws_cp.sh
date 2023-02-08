@@ -5,7 +5,7 @@ set -e
 
 # 1. Configure
 
-AWS_REGION="us-east-1"
+
 # configure aa profile and save the credentials to that profile.
 # >> /dev/null redirects standard output (stdout) to /dev/null, which discards it.
 # 2>&1 redirects standard error (2) to standard output (1),

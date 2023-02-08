@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Exit immediately
-AWS_REGION="us-east-1"
+
 aws configure --profile rearc-quest-aws <<-EOF > /dev/null 2>&1
 ${AWS_ACCESS_KEY_ID}
 ${AWS_SECRET_ACCESS_KEY}

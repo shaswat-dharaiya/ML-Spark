@@ -13,12 +13,9 @@ echo "py4j installed"
 
 AWS_ACCESS_KEY_ID=$1
 AWS_SECRET_ACCESS_KEY=$2
-
-echo "key: $1"
-echo "secret: $2"
+$AWS_REGION=$3
 
 bucket_name=ml-train1 
-AWS_REGION="us-east-1" >> /home/ubuntu/.bashrc 
 
 aws configure --profile ml-spark-aws <<-EOF > /dev/null 2>&1
 $AWS_ACCESS_KEY_ID
