@@ -7,7 +7,7 @@ aws configure --profile ml-spark-aws <<-EOF > /dev/null 2>&1
 $AWS_ACCESS_KEY_ID
 $AWS_SECRET_ACCESS_KEY
 $AWS_REGION
-text
+textf
 EOF
 
 # Create buckets
@@ -53,7 +53,12 @@ cd ./infrastructure/cluster/
 export TF_VAR_access_key=$AWS_ACCESS_KEY_ID
 export TF_VAR_secret_key=$AWS_SECRET_ACCESS_KEY
 export TF_VAR_region=$AWS_REGION
+
 export TF_VAR_bucket_name=$bucket_name
+export TF_VAR_role=$IAM_ROLE
+export TF_VAR_security_group_id=$SEC_GRP
+export TF_VAR_profile=$IAM_ROLE_PROF
+
 terraform init > /dev/null
 terraform plan > /dev/null
 terraform apply --auto-approve

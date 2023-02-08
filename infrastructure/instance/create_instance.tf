@@ -1,16 +1,16 @@
 variable "access_key" {}
 variable "region" {}
 variable "secret_key" {}
+variable "key"{
+  default = "ml_spark"
+}
+
+variable "security_group_id" {}
 
 provider "aws" {
   region = "${var.region}"
   access_key = "${var.access_key}"
   secret_key = "${var.secret_key}"
-}
-
-# Access the IAM Role created earlier
-data "aws_iam_role" "ml_user" {
-  name             = "ml_user_role"
 }
 
 # -----------------------STEP 4.1-----------------------
@@ -33,8 +33,8 @@ resource "aws_instance" "web" {
   availability_zone           = "us-east-1b"
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
-  key_name                    = "ml_spark"
-  vpc_security_group_ids = [aws_security_group.main.id]
+  key_name                    = "${var.key}"
+  vpc_security_group_ids = ["${var.security_group_id}"]
 
 
   tags = {
@@ -48,7 +48,7 @@ resource "aws_instance" "web" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = "${file("../../ml_spark.cer")}"
+      private_key = "${file("../../${var.key}.cer")}"
       host        = "${self.public_dns}"
     }
   }
@@ -60,7 +60,7 @@ resource "aws_instance" "web" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = "${file("../../ml_spark.cer")}"
+      private_key = "${file("../../${var.key}.cer")}"
       host        = "${self.public_dns}"
     }
   }
@@ -74,38 +74,9 @@ resource "aws_instance" "web" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = "${file("../../ml_spark.cer")}"
+      private_key = "${file("../../${var.key}.cer")}"
       host        = "${self.public_dns}"
     }
   }
 }
 
-resource "aws_security_group" "main" {
-
-  egress = [
-    {
-      cidr_blocks      = [ "0.0.0.0/0", ]
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = []
-      self             = false
-      to_port          = 0
-    }
-  ]
-  ingress                = [
-    {
-      cidr_blocks      = [ "0.0.0.0/0", ]
-      description      = ""
-      from_port        = 22
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "tcp"
-      security_groups  = []
-      self             = false
-      to_port          = 22
-    }
-  ]
-}

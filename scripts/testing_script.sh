@@ -18,8 +18,8 @@ $AWS_REGION=$3
 bucket_name=ml-train1 
 
 aws configure --profile ml-spark-aws <<-EOF > /dev/null 2>&1
-$AWS_ACCESS_KEY_ID
-$AWS_SECRET_ACCESS_KEY
+$AWS_ACCESS_KEY_ID_ROOT
+$AWS_SECRET_ACCESS_KEY_ROOT
 $AWS_REGION
 text
 EOF
