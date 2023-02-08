@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@master
       - name: SyncS3
         run: |
-        echo "Access key ID,Secret access key\n$AWS_ACCESS_KEY_ID,$AWS_SECRET_ACCESS_KEY" > ./infrastructure/user/private_key.csv
+        echo "Access key ID,Secret access key\n${{ secrets.AWS_ACCESS_KEY_ID_USER }},${{ secrets.AWS_SECRET_ACCESS_KEY_USER }}" > ./infrastructure/user/private_key.csv
         sh ./scripts/setup_train.sh
         rm ./infrastructure/user/private_key.csv
         env:
