@@ -68,7 +68,7 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ubuntu/testing_script.sh",
-      "/home/ubuntu/testing_script.sh args",
+      "/home/ubuntu/testing_script.sh ${tolist(local.instances)[0]["Access key ID"]} ${tolist(local.instances)[0]["Secret access key"]}",
     ]
 
     connection {

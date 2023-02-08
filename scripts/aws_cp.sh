@@ -1,7 +1,3 @@
-export AWS_ACCESS_KEY_ID=AKIARU3U5ZIE74DSFQGN
-export AWS_SECRET_ACCESS_KEY=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
-export File_Name=./lambda_function.zip
-
 #!/bin/sh
 
 # Exit immediately

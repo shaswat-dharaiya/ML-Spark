@@ -11,8 +11,12 @@ echo "jre installed"
 pip3 install py4j > /dev/null
 echo "py4j installed"
 
-AWS_ACCESS_KEY_ID=AKIARU3U5ZIE74DSFQGN >> /home/ubuntu/.bashrc 
-AWS_SECRET_ACCESS_KEY=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 >> /home/ubuntu/.bashrc 
+AWS_ACCESS_KEY_ID=$1
+AWS_SECRET_ACCESS_KEY=$2
+
+echo "key: $1"
+echo "secret: $2"
+
 bucket_name=ml-train1 
 AWS_REGION="us-east-1" >> /home/ubuntu/.bashrc 
 
@@ -46,7 +50,6 @@ echo "spark installed"
 # Insert these lines into your /home/ubuntu/.bash_profile:
 export SPARK_HOME=/opt/spark >> /home/ubuntu/.bashrc
 export PATH=$PATH:$SPARK_HOME/bin >> /home/ubuntu/.bashrc
-
 
 # Then exit the text editor and return to the command line.
 
